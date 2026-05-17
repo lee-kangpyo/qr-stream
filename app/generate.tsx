@@ -2,12 +2,19 @@ import React from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { QRType, qrTypes, getTypeLabel, getTypeIcon } from "../utils/qrTypes";
-import { useQRGenerator } from "../hooks/useQRGenerator";
+import { useQRGenerator, GenerateMode } from "../hooks/useQRGenerator";
 import { TextForm } from "../components/forms/TextForm";
 import { UrlForm } from "../components/forms/UrlForm";
 import { WifiForm } from "../components/forms/WifiForm";
 import { VCardForm } from "../components/forms/VCardForm";
+import { SplitForm } from "../components/forms/SplitForm";
 import { QRPreview } from "../components/QRPreview";
+import { SplitQRViewer } from "../components/SplitQRViewer";
+
+const MODE_OPTIONS: { key: GenerateMode; label: string; icon: string }[] = [
+  { key: "single", label: "Single QR", icon: "📱" },
+  { key: "split", label: "Split QR", icon: "📄" },
+];
 
 export default function GenerateScreen() {
   const {
@@ -18,6 +25,25 @@ export default function GenerateScreen() {
     updateField,
     handleTypeSelect,
     handleSave,
+    generateMode,
+    setGenerateMode,
+    splitText,
+    setSplitText,
+    chunkSize,
+    setChunkSize,
+    suffix,
+    setSuffix,
+    chunks,
+    isPlaying,
+    currentIndex,
+    autoPlayInterval,
+    setAutoPlayInterval,
+    togglePlay,
+    nextChunk,
+    prevChunk,
+    resetPlayback,
+    goToEnd,
+    currentChunkQR,
   } = useQRGenerator();
 
   const renderForm = () => {
@@ -35,12 +61,8 @@ export default function GenerateScreen() {
     }
   };
 
-  return (
-    <SafeAreaView className="flex-1 bg-[#0A0A0F]">
-      <View className="px-5 pt-14">
-        <Text className="text-white text-[32px] font-bold">Generate QR</Text>
-      </View>
-
+  const renderSingleMode = () => (
+    <>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -75,6 +97,63 @@ export default function GenerateScreen() {
           <Text className="text-[#0A0A0F] text-base font-bold">Save to History</Text>
         </TouchableOpacity>
       </ScrollView>
+    </>
+  );
+
+  const renderSplitMode = () => (
+    <ScrollView className="flex-1 px-5">
+      <View className="gap-4 mt-4">
+        <SplitForm
+          splitText={splitText}
+          setSplitText={setSplitText}
+          chunkSize={chunkSize}
+          setChunkSize={setChunkSize}
+          suffix={suffix}
+          setSuffix={setSuffix}
+        />
+      </View>
+
+      <View className="mt-6 items-center">
+        <Text className="text-white/70 text-sm font-semibold mb-4">Split QR Viewer</Text>
+        <SplitQRViewer
+          chunks={chunks}
+          currentIndex={currentIndex}
+          currentChunkQR={currentChunkQR}
+          isPlaying={isPlaying}
+          autoPlayInterval={autoPlayInterval}
+          setAutoPlayInterval={setAutoPlayInterval}
+          togglePlay={togglePlay}
+          nextChunk={nextChunk}
+          prevChunk={prevChunk}
+          resetPlayback={resetPlayback}
+          goToEnd={goToEnd}
+        />
+      </View>
+    </ScrollView>
+  );
+
+  return (
+    <SafeAreaView className="flex-1 bg-[#0A0A0F]">
+      <View className="px-5 pt-14">
+        <Text className="text-white text-[32px] font-bold">Generate QR</Text>
+      </View>
+
+      <View className="flex-row px-5 mt-4 mb-2 gap-2">
+        {MODE_OPTIONS.map((opt) => (
+          <TouchableOpacity
+            key={opt.key}
+            className={`flex-1 flex-row items-center justify-center py-2.5 rounded-full gap-2 ${generateMode === opt.key ? "bg-[#00D4FF]" : "bg-white/10"}`}
+            onPress={() => setGenerateMode(opt.key)}
+          >
+            <Text className="text-base">{opt.icon}</Text>
+            <Text className={`text-sm font-semibold ${generateMode === opt.key ? "text-[#0A0A0F]" : "text-white/70"}`}>
+              {opt.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {generateMode === "single" ? renderSingleMode() : renderSplitMode()}
     </SafeAreaView>
   );
 }
