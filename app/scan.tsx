@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Clipboard from "expo-clipboard";
 import { saveHistory, generateId } from "../utils/storage";
@@ -38,16 +38,19 @@ export default function ScanScreen() {
   return (
     <View className="flex-1 bg-[#0A0A0F]">
       <CameraView
-        className="absolute inset-0"
+        style={StyleSheet.absoluteFillObject}
         facing="back"
-        torchMode={torchOn ? "on" : "off"}
+        barcodeScannerSettings={{
+          barcodeTypes: ["qr"],
+        }}
+        enableTorch={torchOn}
         onBarcodeScanned={scanned ? undefined : (data) => {
           setScanned(true);
           handleBarcodeScanned(data.data);
         }}
       />
-      <View className="flex-1 pt-safe">
-        <View className="flex-row justify-end p-5 pt-4">
+      <View style={StyleSheet.absoluteFillObject} className="pt-safe justify-between" pointerEvents="box-none">
+        <View className="flex-row justify-end p-5 pt-4" pointerEvents="box-none">
           <TouchableOpacity
             className={`w-12 h-12 rounded-full items-center justify-center ${torchOn ? "bg-[#00D4FF]" : "bg-white/15"}`}
             onPress={() => setTorchOn(!torchOn)}
@@ -56,15 +59,18 @@ export default function ScanScreen() {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-1 items-center justify-center">
-          <View className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-10 h-10 border-t-2 border-l-2 border-[#00D4FF]" />
-          <View className="absolute top-1/3 right-1/4 translate-x-1/2 -translate-y-1/2 w-10 h-10 border-t-2 border-r-2 border-[#00D4FF]" />
-          <View className="absolute bottom-1/3 left-1/4 -translate-x-1/2 translate-y-1/2 w-10 h-10 border-b-2 border-l-2 border-[#00D4FF]" />
-          <View className="absolute bottom-1/3 right-1/4 translate-x-1/2 translate-y-1/2 w-10 h-10 border-b-2 border-r-2 border-[#00D4FF]" />
+        <View className="items-center justify-center" pointerEvents="none">
+          <View className="w-64 h-64 border-2 border-white/20 rounded-3xl items-center justify-center">
+            {/* Viewfinder brackets */}
+            <View className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-[#00D4FF] rounded-tl-xl" />
+            <View className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[#00D4FF] rounded-tr-xl" />
+            <View className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[#00D4FF] rounded-bl-xl" />
+            <View className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[#00D4FF] rounded-br-xl" />
+          </View>
         </View>
 
-        <View className="items-center px-8 pb-14">
-          <Text className="text-white text-base font-medium text-center">
+        <View className="items-center px-8 pb-14" pointerEvents="none">
+          <Text className="text-white text-base font-medium text-center bg-black/60 px-6 py-3 rounded-full overflow-hidden">
             {scanned ? "Copied! Scan another QR code" : "Point at QR code to scan"}
           </Text>
         </View>
