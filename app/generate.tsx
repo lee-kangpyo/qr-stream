@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { QRType, qrTypes, getTypeLabel, getTypeIcon } from "../utils/qrTypes";
 import { useQRGenerator, GenerateMode } from "../hooks/useQRGenerator";
 import { TextForm } from "../components/forms/TextForm";
@@ -67,7 +66,7 @@ export default function GenerateScreen() {
         horizontal
         showsHorizontalScrollIndicator={false}
         className="max-h-20 border-b border-white/10"
-        contentContainerStyle="px-4 flex-row items-center gap-3"
+        contentContainerClassName="px-4 flex-row items-center gap-3"
       >
         {qrTypes.map((type) => (
           <TouchableOpacity
@@ -133,8 +132,8 @@ export default function GenerateScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-[#0A0A0F]">
-      <View className="px-5 pt-14">
+    <View className="flex-1 bg-[#0A0A0F] pt-safe">
+      <View className="px-5 pt-4">
         <Text className="text-white text-[32px] font-bold">Generate QR</Text>
       </View>
 
@@ -154,6 +153,6 @@ export default function GenerateScreen() {
       </View>
 
       {generateMode === "single" ? renderSingleMode() : renderSplitMode()}
-    </SafeAreaView>
+    </View>
   );
 }

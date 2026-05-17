@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { View, Text, FlatList, TouchableOpacity, Alert, Modal, Pressable } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { QRData, getTypeIcon, getTypeLabel } from "../utils/qrTypes";
 import { getHistory, clearHistory } from "../utils/storage";
@@ -66,8 +65,8 @@ export default function HistoryScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-[#0A0A0F]">
-      <View className="flex-row justify-between items-center px-5 pt-14">
+    <View className="flex-1 bg-[#0A0A0F] pt-safe">
+      <View className="flex-row justify-between items-center px-5 pt-4">
         <Text className="text-white text-[32px] font-bold">History</Text>
         {history.length > 0 && (
           <TouchableOpacity onPress={handleClear}>
@@ -89,7 +88,7 @@ export default function HistoryScreen() {
           data={history}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
-          contentContainerStyle="px-4 py-4 gap-3"
+          contentContainerClassName="px-4 py-4 gap-3"
           showsVerticalScrollIndicator={false}
         />
       )}
@@ -119,6 +118,6 @@ export default function HistoryScreen() {
           </View>
         </Pressable>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 }

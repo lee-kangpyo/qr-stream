@@ -14,7 +14,10 @@ export const QRPreview = React.memo(({ qrString, size = 200, placeholder = "Ente
       {qrString ? (
         <QRCode value={qrString} size={size} backgroundColor="#ffffff" />
       ) : (
-        <View className={`w-[${size}px] h-[${size}px] items-center justify-center bg-white/90 rounded-2xl`}>
+        <View 
+          className="items-center justify-center bg-white/90 rounded-2xl"
+          style={{ width: size, height: size }}
+        >
           <Text className="text-black/50 text-sm text-center px-5">{placeholder}</Text>
         </View>
       )}
