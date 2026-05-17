@@ -2,9 +2,9 @@ import { useState, useCallback } from "react";
 import { View, Text, FlatList, TouchableOpacity, Alert, Modal, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
-import QRCode from "react-native-qrcode-svg";
 import { QRData, getTypeIcon, getTypeLabel } from "../utils/qrTypes";
 import { getHistory, clearHistory } from "../utils/storage";
+import { QRPreview } from "../components/QRPreview";
 
 export default function HistoryScreen() {
   const [history, setHistory] = useState<QRData[]>([]);
@@ -106,13 +106,7 @@ export default function HistoryScreen() {
               <Text className="text-[32px] mr-3">{selectedItem && getTypeIcon(selectedItem.type)}</Text>
               <Text className="text-white text-2xl font-bold">{selectedItem && getTypeLabel(selectedItem.type)}</Text>
             </View>
-            <View className="p-5 bg-white rounded-2xl mb-4">
-              <QRCode
-                value={selectedItem?.rawString || ""}
-                size={250}
-                backgroundColor="#ffffff"
-              />
-            </View>
+            <QRPreview qrString={selectedItem?.rawString || ""} size={250} />
             <Text className="text-white/70 text-sm text-center mb-5 px-2" numberOfLines={0}>
               {selectedItem?.rawString}
             </Text>
