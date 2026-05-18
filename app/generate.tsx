@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import { QRType, qrTypes, getTypeLabel, getTypeIcon } from "../utils/qrTypes";
 import { useQRGenerator, GenerateMode } from "../hooks/useQRGenerator";
 import { TextForm } from "../components/forms/TextForm";
@@ -44,6 +45,27 @@ export default function GenerateScreen() {
     goToEnd,
     currentChunkQR,
   } = useQRGenerator();
+
+  const { text: shareText, mode: shareMode } = useLocalSearchParams<{
+    text?: string;
+    mode?: string;
+  }>();
+  const lastProcessedTextRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!shareText || !shareMode || lastProcessedTextRef.current === shareText) return;
+
+    lastProcessedTextRef.current = shareText;
+
+    if (shareMode === "single") {
+      setGenerateMode("single");
+      handleTypeSelect("TEXT");
+      updateField("text", shareText);
+    } else if (shareMode === "split") {
+      setGenerateMode("split");
+      setSplitText(shareText);
+    }
+  }, [shareText, shareMode, setGenerateMode, handleTypeSelect, updateField, setSplitText]);
 
   const renderForm = () => {
     switch (selectedType) {

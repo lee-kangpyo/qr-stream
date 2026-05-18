@@ -1,10 +1,11 @@
 import "../global.css";
-import { Tabs } from "expo-router";
+import { useEffect, useRef } from "react";
+import { Tabs, useRouter } from "expo-router";
 import { Text } from "react-native";
 import { SafeAreaProvider, SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 import { styled } from "react-native-css";
+import { useShareIntent } from "expo-share-intent";
 
-// NativeWind v5: Wrap the component with styled() to bridge the className prop
 const SafeAreaView = styled(RNSafeAreaView, {
   className: "style",
 });
@@ -19,6 +20,31 @@ function TabIcon({ name }: { name: string }) {
 }
 
 export default function TabLayout() {
+  const router = useRouter();
+  const { hasShareIntent, shareIntent, resetShareIntent } = useShareIntent({
+    debug: false,
+    resetOnBackground: true,
+  });
+  const processedRef = useRef(false);
+
+  useEffect(() => {
+    if (!hasShareIntent || processedRef.current) return;
+
+    const text = shareIntent.text || shareIntent.webUrl || "";
+    if (!text) return;
+
+    processedRef.current = true;
+    const mode = text.length <= 200 ? "single" : "split";
+    router.replace(`/generate?text=${encodeURIComponent(text)}&mode=${mode}`);
+    resetShareIntent();
+
+    const timer = setTimeout(() => {
+      processedRef.current = false;
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [hasShareIntent, shareIntent, resetShareIntent, router]);
+
   return (
     <SafeAreaProvider>
       <Tabs

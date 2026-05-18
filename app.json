@@ -30,7 +30,21 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-router",
+      [
+        "expo-share-intent",
+        {
+          "ios": {
+            "AppGroup": "group.com.qrstream.app"
+          }
+        }
+      ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c6a051d7-f1c7-4341-96bf-4bbce5f0dc87"
+      }
+    }
   }
 }
