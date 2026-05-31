@@ -19,14 +19,14 @@ const SUFFIX_OPTIONS: { label: string; value: SuffixOption }[] = [
   { label: "Tab (\\t)", value: "tab" },
 ];
 
-const CHUNK_PRESETS = [50, 100, 200, 300, 500, 800, 1000];
+const CHUNK_PRESETS = [50, 100, 200, 300, 500, 800, 1000, 1500, 2000];
 
 export const SplitForm = React.memo(
   ({ splitText, setSplitText, chunkSize, setChunkSize, suffix, setSuffix }: SplitFormProps) => {
     const handleFileUpload = useCallback(async () => {
       try {
         const result = await DocumentPicker.getDocumentAsync({
-          type: ["text/*", "application/javascript", "application/json"],
+          type: "*/*",
           copyToCacheDirectory: true,
         });
 

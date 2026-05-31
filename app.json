@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.qrstream.app"
+      "bundleIdentifier": "com.akmdz.qrstream"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +23,7 @@
         "backgroundColor": "#0A0A0F"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.qrstream.app"
+      "package": "com.akmdz.qrstream"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -35,7 +35,7 @@
         "expo-share-intent",
         {
           "ios": {
-            "AppGroup": "group.com.qrstream.app"
+            "AppGroup": "group.com.akmdz.qrstream"
           }
         }
       ]

@@ -12,7 +12,7 @@ const SafeAreaView = styled(RNSafeAreaView, {
 
 function TabIcon({ name }: { name: string }) {
   const icons: Record<string, string> = {
-    scan: "📷",
+    index: "📷",
     generate: "🔲",
     history: "📋",
   };
@@ -63,10 +63,10 @@ export default function TabLayout() {
         }}
       >
         <Tabs.Screen
-          name="scan"
+          name="index"
           options={{
             title: "Scan",
-            tabBarIcon: () => <TabIcon name="scan" />,
+            tabBarIcon: () => <TabIcon name="index" />,
           }}
         />
         <Tabs.Screen
